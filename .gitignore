@@ -102,3 +102,8 @@ dist
 
 # TernJS port file
 .tern-port
+
+# New modules
+__pycache__
+env
+.vscode
