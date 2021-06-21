@@ -38,10 +38,7 @@ db.getConnection((error) => {
 });
 
 app.use("", require("./routes/index"));
-// app.use('/auth', require('./routes/auth'));
-// app.use('/rol', require('./routes/rol'));
-// app.use('/user', require('./routes/user'));
-// app.use('/payment',require('./routes/pay'))
+app.use("/auth", require("./routes/auth"));
 
 app.listen(port, () => {
   console.log(`Server started on Port ${port}`);
