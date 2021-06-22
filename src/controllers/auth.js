@@ -27,7 +27,7 @@ exports.login = async (req, res) => {
       async (error, results) => {
         console.log(results);
         if (
-          !results ||
+          results.length === 0 ||
           !(await bcrypt.compare(password, results[0].password))
         ) {
           return res.status(401).json({
