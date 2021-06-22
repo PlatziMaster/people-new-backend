@@ -14,7 +14,7 @@ exports.login = async (req, res) => {
     const { email, password } = req.body;
 
     if (!email || !password) {
-      return res.status(400).res.json({
+      return res.status(400).json({
         error: {
           message: "Please provide an email and password",
         },
@@ -30,7 +30,7 @@ exports.login = async (req, res) => {
           !results ||
           !(await bcrypt.compare(password, results[0].password))
         ) {
-          res.status(401).json({
+          return res.status(401).json({
             error: {
               message: "Email or Password is incorrect",
             },
