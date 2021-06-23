@@ -3,11 +3,11 @@ import requests
 import os
 import base64
 
-XPATH_WIKI_BIO = 'https://en.wikipedia.org/wiki/Henry_Cavill'
+WIKI_BASE_URL = 'https://en.wikipedia.org/wiki/'
 
 def parse_wiki_bio(artist: str) -> str:
     try:
-        response = requests.get(f'https://en.wikipedia.org/wiki/{artist.replace(" ", "_").title()}')
+        response = requests.get(f'{WIKI_BASE_URL}{artist.replace(" ", "_").title()}')
         if response.status_code == 200:
             famous = response.content.decode('utf-8')
             parsed = html.fromstring(famous)
@@ -105,11 +105,8 @@ def get_artist_albums_ids(artistId: str) -> list:
 #     obj.append(album)
 # print(obj)
 
-track_list = ['spotify:track:6QpvcM1VcNxxBMrxWkdgeM', 'spotify:track:70LcF31zb1H0PyJoS1Sx1r', 'spotify:track:6nOsTV3cMjLh3k6Wpk468L', 'spotify:track:2kRFrWaLWiKq48YYVdGcm8', 'spotify:track:63OQupATfueTdZMWTxW03A',
-'spotify:track:135WMJorhiGvPe50XF54D9', 'spotify:track:4Wgj6jzoI2gYlumXdYAB8U', 'spotify:track:4oXg7xT4ksBxHTx8PcmSXw', 'spotify:track:6LgJvl0Xdtc73RJ1mmpotq', 'spotify:track:3rCojwN8TYQwucZUKF7jXu', 
-'spotify:track:55q3Ro66yXWi9rsEddeEN4', 'spotify:track:4pWIwnnqx8k01fuF95UMIg', 'spotify:track:1UuaWKypSkIHxFZD03zw4m']
 
-def get_most_sad_song_user(tracklist: list):
+def get_most_sad_song(tracklist: list):
     valences = []
     for item in tracklist:
         new_item = item.replace('spotify:track:', '')
@@ -122,8 +119,6 @@ def get_most_sad_song_user(tracklist: list):
     print(min(valences))
     
 #print(get_most_sad_song_user(track_list))
-
-print(max([0.322, 0.104, 0.178, 0.0629, 0.324, 0.35, 0.388, 0.844, 0.207, 0.334, 0.0679, 0.733, 0.0398]))
 
         
 
