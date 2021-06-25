@@ -3,6 +3,7 @@ import requests
 import os
 import base64
 import json
+import re
 from pymongo import MongoClient
 from requests.api import get
 
@@ -15,8 +16,9 @@ def parse_wiki_bio(artist: str) -> str:
             famous = response.content.decode('utf-8')
             parsed = html.fromstring(famous)
             try:
-                bio = str(parsed.xpath('normalize-space(//p[preceding-sibling::table[@class="infobox biography vcard"] and following-sibling::div[@class="toc"]])'))
-                return bio
+                bio = parsed.xpath('normalize-space(//p[preceding-sibling::table[@class="infobox biography vcard"] and following-sibling::div[@class="toc"]])')
+                replaced_bio = re.sub(r'\[.*?\]', '', bio)
+                return replaced_bio
             except IndexError:
                 return 
     except ValueError as ve:
@@ -24,22 +26,22 @@ def parse_wiki_bio(artist: str) -> str:
 
 
 def query_artist(artist: str) -> dict:
-    url = f'https://api.celebrityninjas.com/v1/search?name={artist.title()}'
+    url = f'https://api.celebrityninjas.com/v1/search?name={artist}&limit=1'
     api_key = os.environ['apikey']
     headers = {'x-api-key': api_key}
-    print(headers)
     resp = requests.get(url=url, headers=headers)
     if resp.status_code == 200 and resp.json() != []:
             return resp.json()[0]
     return {'message': 'The query did not return any results'}
 
 
-def join_artist_with_bio(bio: str, artist: dict) -> dict:
-    artist['bio'] = bio
-    return artist
+def join_artist_with_bio(bio: str, celebrity: dict) -> dict:
+    celebrity['bio'] = bio
+    return celebrity
+
 
 # Spotify API For music portion
-def auth() -> str:
+def spotify_auth() -> str:
     client_id = os.environ['client_id_sp']
     client_secret = os.environ['client_secret_sp']
     # Check the testResponse Json for further reference
@@ -63,7 +65,7 @@ BASE_SPOTIFY_URL = 'https://api.spotify.com/v1'
 
 
 def set_spotify_header_request() -> dict:
-    token = auth()
+    token = spotify_auth()
     return {
         'Content-type': 'application/json',
         'Authorization': f'Bearer {token}'
@@ -165,6 +167,13 @@ def create_artist_and_its_albums(list_of_albums: list, artist_name:str ) -> dict
     return artist
 
 
+def check_artist_health(artist_with_bio: dict, mongo_collection) -> None:
+    if 'message' in artist_with_bio.keys():
+        return
+    mongo_collection.insert_one(artist_with_bio)
+    print('Celebrity inserted')
+
+
 def etl():
     client = MongoClient(f"mongodb+srv://capstoneuser:{os.environ['mongopwd']}@capstone2cluster.bri6g.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
     db = client.capstoneproject2
@@ -219,11 +228,50 @@ def etl():
 
     neck_deep = create_artist_and_its_albums(neck_deep_albums, 'Neck deep')
     collection.insert_one(neck_deep)
+    print('Finished inserting music artists')
 
+    # Changing collection
+    print('Inserting celebrities')
+    collection = db.celebrities
+    elon = query_artist('elon musk')
+    elon_bio = parse_wiki_bio('elon musk')
+    check_artist_health(join_artist_with_bio(elon_bio, elon), collection)
+
+
+    mark_z = query_artist('Mark Zuckerberg')
+    mark_z_bio = parse_wiki_bio('Mark Zuckerberg')
+    check_artist_health(join_artist_with_bio(mark_z_bio, mark_z), collection)
+
+    mark_hamill = query_artist('Mark hamill')
+    mark_h_bio = parse_wiki_bio('Mark hamill')
+    check_artist_health(join_artist_with_bio(mark_h_bio, mark_hamill), collection)
+
+    halle_berry = query_artist('Halle Berry')
+    halle_b_bio = parse_wiki_bio('Halle berry')
+    check_artist_health(join_artist_with_bio(halle_b_bio, halle_berry), collection)
+
+    shakira = query_artist('Shakira')
+    shakira_bio = parse_wiki_bio('Shakira')
+    check_artist_health(join_artist_with_bio(shakira_bio, shakira), collection)
+
+    henry = query_artist('Henry Cavill')
+    henry_bio = parse_wiki_bio('Henry cavill')
+    check_artist_health(join_artist_with_bio(henry_bio, henry), collection)
+
+    sofia = query_artist('Sofia Vergara')
+    sofia_bio = parse_wiki_bio('Sofia Vergara')
+    check_artist_health(join_artist_with_bio(sofia_bio, sofia), collection)
+
+    bill = query_artist('Bill gates')
+    bill_bio = parse_wiki_bio('Bill gates')
+    check_artist_health(join_artist_with_bio(bill_bio, bill), collection)
+
+    tom = query_artist('tom holland')
+    tom_bio = parse_wiki_bio('Tom Holland')
+    check_artist_health(join_artist_with_bio(tom_bio, tom), collection)
+
+    robert = query_artist('Robert Downey Jr')
+    robertjr_bio = parse_wiki_bio('Robert Downey Jr.')
+    check_artist_health(join_artist_with_bio(robertjr_bio, robert), collection)
 
 etl()
-
-# artist = 'Matthew Belamy'
-# bio = parse_wiki_bio(artist)
-# details = query_artist(artist)
-# print(join_artist_with_bio(bio, details))
