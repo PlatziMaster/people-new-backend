@@ -3,10 +3,7 @@ import {ObjectID} from 'mongodb';
 
 export const resolvers = {
  Query :{
-   hello: () =>{
-     return "Hello world with GraphQL"
-   },
-   getCelebrities: async() =>{
+  getCelebrities: async() =>{
     const db = await connect();
     const result = await db.collection('celebrities').find({}).toArray();
 
@@ -18,7 +15,18 @@ export const resolvers = {
      const result = await db.collection('celebrities').findOne({"_id":ObjectID(_id)});
 
     return result
-   }
+   },
+   getArtists: async() =>{
+    const db = await connect();
+    const result = await db.collection('songsArtists').find({}).toArray();
+    return result
+   },
+   getArtist: async(_,args) =>{
+    const _id =args.id;
+      const db = await connect();
+     const result = await db.collection('songsArtists').findOne({"_id":ObjectID(_id)});
 
+    return result
+   }
  }
 }
