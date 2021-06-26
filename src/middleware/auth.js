@@ -18,12 +18,12 @@ async function middleware(req, res, next) {
   }
   const [bearer, token] = bearerToken.split(" ");
   if (bearer !== "Bearer") {
-    res.json({
+
+    return next(res.json({
       error: {
         message: "Invalid token format",
       },
-    })
-    return next(boom.unauthorized("Invalid token format"));
+    }));
   }
 
   try {
@@ -45,12 +45,12 @@ async function middleware(req, res, next) {
     return next();
   }
   //is not valid
-  res.json({
+
+  next(res.json({
     error: {
       message: "Invalid token",
     },
-  })
-  next(boom.unauthorized("Invalid token"));
+  }));
 }
 
 module.exports = middleware;
