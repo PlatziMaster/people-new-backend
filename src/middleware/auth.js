@@ -9,12 +9,12 @@ const validateGoogle = require("../utils/validateGoogleToken");
 async function middleware(req, res, next) {
   const bearerToken = req.headers["authorization"];
   if (!bearerToken) {
-    res.json({
+
+    return next( res.json({
       error: {
         message: "Token required",
       },
-    })
-    return next(boom.unauthorized("Token required "));
+    }));
   }
   const [bearer, token] = bearerToken.split(" ");
   if (bearer !== "Bearer") {
