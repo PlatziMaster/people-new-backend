@@ -9,21 +9,21 @@ const validateGoogle = require("../utils/validateGoogleToken");
 async function middleware(req, res, next) {
   const bearerToken = req.headers["authorization"];
   if (!bearerToken) {
-
-    return next( res.json({
+    res.json({
       error: {
         message: "Token required",
       },
-    }));
+    })
+    return next(boom.unauthorized("Token required "));
   }
   const [bearer, token] = bearerToken.split(" ");
   if (bearer !== "Bearer") {
-
-    return next(res.json({
+    res.json({
       error: {
         message: "Invalid token format",
       },
-    }));
+    })
+    return next(boom.unauthorized("Invalid token format"));
   }
 
   try {
@@ -45,12 +45,12 @@ async function middleware(req, res, next) {
     return next();
   }
   //is not valid
-
-  next(res.json({
+  res.json({
     error: {
       message: "Invalid token",
     },
-  }));
+  })
+  next(boom.unauthorized("Invalid token"));
 }
 
 module.exports = middleware;
