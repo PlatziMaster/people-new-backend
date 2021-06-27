@@ -1,6 +1,5 @@
-import {makeExecutableSchema} from "graphql-tools"
-import {resolvers} from "../graphQL/resolvers"
-
+import { makeExecutableSchema } from "graphql-tools";
+import { resolvers } from "../graphQL/resolvers";
 
 const typeDefs = `
  type Query {
@@ -61,5 +60,5 @@ type analisys{
 
 export default makeExecutableSchema({
   typeDefs: typeDefs,
-  resolvers: resolvers
-})
+  resolvers: resolvers,
+});
