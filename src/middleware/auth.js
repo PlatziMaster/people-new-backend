@@ -13,7 +13,7 @@ async function middleware(req, res, next) {
       error: {
         message: "Token required",
       },
-    })
+    });
     return next(boom.unauthorized("Token required "));
   }
   const [bearer, token] = bearerToken.split(" ");
@@ -22,7 +22,7 @@ async function middleware(req, res, next) {
       error: {
         message: "Invalid token format",
       },
-    })
+    });
     return next(boom.unauthorized("Invalid token format"));
   }
 
@@ -49,7 +49,7 @@ async function middleware(req, res, next) {
     error: {
       message: "Invalid token",
     },
-  })
+  });
   next(boom.unauthorized("Invalid token"));
 }
 

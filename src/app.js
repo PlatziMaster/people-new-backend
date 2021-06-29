@@ -4,7 +4,7 @@ const dotenv = require("dotenv");
 var cors = require("cors");
 const cookieParser = require("cookie-parser");
 const { graphqlHTTP } = require("express-graphql");
-import schema from "./schema/schema"
+import schema from "./schema/schema";
 dotenv.config({ path: "./.env" });
 const auth = require("./middleware/auth");
 
@@ -18,7 +18,6 @@ const db = mysql.createPool({
   password: process.env.DATABASE_PASSWORD,
   database: process.env.DATABASE,
 });
-
 
 var corsOptions = {
   origin: "*",
@@ -40,8 +39,7 @@ db.getConnection((error) => {
   }
 });
 
-
-app.use("/graphql", auth, graphqlHTTP({ schema: schema, graphiql: true }));
+app.use("/graphql", graphqlHTTP({ schema: schema, graphiql: true }));
 app.use("", require("./routes/index"));
 app.use("/auth", require("./routes/auth"));
 app.use("/celebrities", require("./routes/celebrities"));

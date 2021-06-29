@@ -62,8 +62,8 @@ exports.login = async (req, res) => {
             }
           );
           res.cookie("jwt", token, cookieOptions);
-          res.status(200).json({
-            status: 200,
+          res.status(202).json({
+            status: 202,
             "message:": "User Login",
             id: id,
             token: token,
@@ -115,7 +115,7 @@ exports.register = (req, res) => {
           } else {
             console.log(results);
             return res.json({
-              status: 200,
+              status: 202,
               "message:": "User registered",
             });
           }
