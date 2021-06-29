@@ -180,6 +180,9 @@ def etl():
     collection = db.songsArtists
 
     print('Getting albums')
+    # Dropping collection before inserting
+    collection.drop()
+
     muse_albums = get_artist_albums_ids('12Chz98pHFMPJEknJQMWvI')
     coldplay_albums = get_artist_albums_ids('4gzpq5DPGxSnKTe4SA8HAU')
     madona_albums = get_artist_albums_ids('6tbjWDEIzxoDsBA1FuhfPW')
@@ -190,6 +193,8 @@ def etl():
     rise_against_albums = get_artist_albums_ids('6Wr3hh341P84m3EI8qdn9O')
     imperious_albums = get_artist_albums_ids('5iO0Y7Q3X5KQx4OkRT0LHZ')
     neck_deep_albums = get_artist_albums_ids('2TM0qnbJH4QPhGMCdPt7fH')
+
+    collection = db.songsArtists
 
     print('Getting albums details and inserting into database')
     muse = create_artist_and_its_albums(muse_albums, 'Muse')
@@ -233,6 +238,9 @@ def etl():
     # Changing collection
     print('Inserting celebrities')
     collection = db.celebrities
+    collection.drop()
+    collection = db.celebrities
+    
     elon = query_artist('elon musk')
     elon_bio = parse_wiki_bio('elon musk')
     check_artist_health(join_artist_with_bio(elon_bio, elon), collection)
