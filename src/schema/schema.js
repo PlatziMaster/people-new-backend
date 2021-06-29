@@ -31,6 +31,7 @@ type Artists{
   Image: String
  }
  type AlbumsSongs{
+  Id:String
   Album_name: String
   Total_tracks: Int
   Tracks_ids: [Tracks]
