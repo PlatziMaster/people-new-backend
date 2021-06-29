@@ -69,6 +69,7 @@ Export the environment variables
 export apikey=yourApiKey
 export client_id_sp=yourSpotifyClientId
 export client_secret_sp=YourSpotifyClientSecret
+export mongopwd=yourMongoDBPwd
 ```
 
 Run the process and wait for it to finish:

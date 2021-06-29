@@ -6,6 +6,7 @@ import json
 import re
 from pymongo import MongoClient
 from requests.api import get
+import uuid
 
 WIKI_BASE_URL = 'https://en.wikipedia.org/wiki/'
 
@@ -89,7 +90,8 @@ def get_album_details(albumId: str) -> dict:
             response_object['Tracks_ids'].append({'id': item['id'], 'song_name': item['name']})
 
         response_object['Total_duration_in_minutes']= (total_duration/1000)//60
-            
+        uid = str(uuid.uuid4())
+        response_object['Id'] = uid      
         return response_object
 
 """
@@ -196,43 +198,56 @@ def etl():
 
     collection = db.songsArtists
 
-    print('Getting albums details and inserting into database')
+    print('Doing analysis and inserting into database')
     muse = create_artist_and_its_albums(muse_albums, 'Muse')
+    muse['Image'] = f'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/MuseBristol_050619-118_%2848035812973%29.jpg/1920px-MuseBristol_050619-118_%2848035812973%29.jpg'
     collection.insert_one(muse)
     print('Artist inserted')
 
     coldplay = create_artist_and_its_albums(coldplay_albums, 'Coldplay')
+    coldplay['Image'] = f'https://i1.wp.com/www.sopitas.com/wp-content/uploads/2020/06/coldplay-canciones-xy.jpg'
     collection.insert_one(coldplay)
     print('Artist inserted')
     
     madona = create_artist_and_its_albums(madona_albums, 'Madonna')
+    madona['Image'] = f'https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSFBMAqWvZYgc1GdzhdUsduoU3_lqBkll6EPGCHWoacG25zxE90'
     collection.insert_one(madona)
     print('Artist inserted')
 
     britney = create_artist_and_its_albums(britney_spears_albums, 'Britney Spears')
+    britney['Image'] = f'https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSdFQDe5hctJraHtbNlCqzsoaRYxsnCkpFeTFvFrOKGVkUcDuYr'
     collection.insert_one(britney)
     print('Artist inserted')
 
     billie = create_artist_and_its_albums(billie_eilish_albums, 'Billie Eilish')
+    billie['Image'] = f'https://static.dw.com/image/52315108_303.jpg'
     collection.insert_one(billie)
     print('Artist inserted')
 
     breaking_benjamin = create_artist_and_its_albums(breaking_benjamin_albums, 'Breaking benjamin')
+    breaking_benjamin['Image'] = f'https://summainferno.com/wp-content/uploads/2019/10/Breaking-Benjamin.jpg'
     collection.insert_one(breaking_benjamin)
     print('Artist inserted')
 
     imagine_dragons = create_artist_and_its_albums(imagine_dragons_albums, 'Imagine dragons')
+    imagine_dragons['Image'] = f'https://www.eluniversal.com.mx/sites/default/files/2019/12/19/imagine_dragons.jpg'
     collection.insert_one(imagine_dragons)
     print('Artist inserted')
 
     rise_against = create_artist_and_its_albums(rise_against_albums, 'Rise Against')
+    rise_against['Image'] = f'https://s3.us-west-2.amazonaws.com/static.ernieball.com/website/images/striking_a_chord/image/full/20.jpg?1594908911'
     collection.insert_one(rise_against)
+    print('Artist inserted')
 
     imperious = create_artist_and_its_albums(imperious_albums, 'Imperious')
+    imperious['Image'] = f'https://scontent.fgdl3-1.fna.fbcdn.net/v/t1.6435-9/123771543_1075122889596604_8994035093060246774_n.jpg?_nc_cat=107&ccb=1-3&_nc_sid=e3f864&_nc_eui2=AeH03PFeUvU99iqJkQUEZB-C3v-TNw6UHEve_5M3DpQcS8UMGiHbxwO0z-3bjjA9jgM&_nc_ohc=Q9q6lqpN0ikAX--Dnct&_nc_ht=scontent.fgdl3-1.fna&oh=d5b1c0e1efd34362fac92a6aa57699bd&oe=60DEF9D2' 
     collection.insert_one(imperious)
+    print('Artist inserted')
 
     neck_deep = create_artist_and_its_albums(neck_deep_albums, 'Neck deep')
+    neck_deep['Image'] = f'https://www.rockzonemag.com/wp-content/uploads/2020/08/NeckDeep_foto-2020_Gullick_Y1A9386.gif'
     collection.insert_one(neck_deep)
+    print('Artist inserted')
     print('Finished inserting music artists')
 
     # Changing collection
@@ -243,43 +258,63 @@ def etl():
     
     elon = query_artist('elon musk')
     elon_bio = parse_wiki_bio('elon musk')
-    check_artist_health(join_artist_with_bio(elon_bio, elon), collection)
+    joined_elon = join_artist_with_bio(elon_bio, elon)
+    joined_elon['Image'] = f'https://www.google.com/url?sa=i&url=https%3A%2F%2Fes.wikipedia.org%2Fwiki%2FElon_Musk&psig=AOvVaw2yJpsErA5USc0r1yadUR9Z&ust=1625017631327000&source=images&cd=vfe&ved=0CAoQjRxqFwoTCNCviMfcu_ECFQAAAAAdAAAAABAD'
+    check_artist_health(joined_elon, collection)
 
 
     mark_z = query_artist('Mark Zuckerberg')
     mark_z_bio = parse_wiki_bio('Mark Zuckerberg')
-    check_artist_health(join_artist_with_bio(mark_z_bio, mark_z), collection)
+    joined_mark = join_artist_with_bio(mark_z_bio, mark_z)
+    joined_mark['Image'] = f'https://about.fb.com/es/wp-content/uploads/sites/13/2019/01/mz.jpg?fit=3241%2C2160'
+    check_artist_health(joined_mark, collection)
 
     mark_hamill = query_artist('Mark hamill')
     mark_h_bio = parse_wiki_bio('Mark hamill')
-    check_artist_health(join_artist_with_bio(mark_h_bio, mark_hamill), collection)
+    joined_mark_h = join_artist_with_bio(mark_h_bio, mark_hamill)
+    joined_mark_h['Image'] = f'https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcT0W1rBFC1zAjS3amBGX6C3diI8zBZOeVW9oIphVXmIM4anleEO'
+    check_artist_health(joined_mark_h, collection)
 
     halle_berry = query_artist('Halle Berry')
     halle_b_bio = parse_wiki_bio('Halle berry')
-    check_artist_health(join_artist_with_bio(halle_b_bio, halle_berry), collection)
+    joined_halle_b = join_artist_with_bio(halle_b_bio, halle_berry)
+    joined_halle_b['Image'] = f'https://upload.wikimedia.org/wikipedia/commons/thumb/5/56/Halle_Berry_by_Gage_Skidmore_2.jpg/1200px-Halle_Berry_by_Gage_Skidmore_2.jpg'
+    check_artist_health(joined_halle_b, collection)
 
     shakira = query_artist('Shakira')
     shakira_bio = parse_wiki_bio('Shakira')
-    check_artist_health(join_artist_with_bio(shakira_bio, shakira), collection)
+    joined_shakira = join_artist_with_bio(shakira_bio, shakira)
+    joined_shakira['Image'] = f'https://e00-elmundo.uecdn.es/assets/multimedia/imagenes/2021/01/13/16105465107404.jpg'
+    check_artist_health(joined_shakira, collection)
 
     henry = query_artist('Henry Cavill')
     henry_bio = parse_wiki_bio('Henry cavill')
-    check_artist_health(join_artist_with_bio(henry_bio, henry), collection)
+    joined_henry = join_artist_with_bio(henry_bio, henry)
+    joined_henry['Image'] = f'https://upload.wikimedia.org/wikipedia/commons/d/dd/Henry_Cavill_by_Gage_Skidmore_2.jpg'
+    check_artist_health(joined_henry, collection)
 
     sofia = query_artist('Sofia Vergara')
     sofia_bio = parse_wiki_bio('Sofia Vergara')
-    check_artist_health(join_artist_with_bio(sofia_bio, sofia), collection)
+    joined_sofia = join_artist_with_bio(sofia_bio, sofia)
+    joined_sofia['Image'] = f'https://www.google.com/url?sa=i&url=https%3A%2F%2Fes.wikipedia.org%2Fwiki%2FSof%25C3%25ADa_Vergara&psig=AOvVaw1blti4619q-meR-otUB9Ty&ust=1625018129776000&source=images&cd=vfe&ved=0CAoQjRxqFwoTCIDp5Lbeu_ECFQAAAAAdAAAAABAD'
+    check_artist_health(joined_sofia, collection)
 
     bill = query_artist('Bill gates')
     bill_bio = parse_wiki_bio('Bill gates')
-    check_artist_health(join_artist_with_bio(bill_bio, bill), collection)
+    joined_bill = join_artist_with_bio(bill_bio, bill)
+    joined_bill['Image'] = f'https://upload.wikimedia.org/wikipedia/commons/a/a8/Bill_Gates_2017_%28cropped%29.jpg'
+    check_artist_health(joined_bill, collection)
 
     tom = query_artist('tom holland')
     tom_bio = parse_wiki_bio('Tom Holland')
-    check_artist_health(join_artist_with_bio(tom_bio, tom), collection)
+    joined_tom = join_artist_with_bio(tom_bio, tom)
+    joined_tom['Image'] = f'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/Tom_Holland_by_Gage_Skidmore.jpg/1200px-Tom_Holland_by_Gage_Skidmore.jpg'
+    check_artist_health(joined_tom, collection)
 
     robert = query_artist('Robert Downey Jr')
     robertjr_bio = parse_wiki_bio('Robert Downey Jr.')
-    check_artist_health(join_artist_with_bio(robertjr_bio, robert), collection)
+    joined_robert = join_artist_with_bio(robertjr_bio, robert)
+    joined_robert['Image'] = f'https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/robert-downey-jr-iron-man-casting-1563435293.jpg'
+    check_artist_health(joined_robert, collection)
 
 etl()
