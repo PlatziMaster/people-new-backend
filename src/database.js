@@ -3,6 +3,9 @@ require("dotenv").config();
 const USER = encodeURIComponent(process.env.DB_USER);
 const PASSWORD = encodeURIComponent(process.env.DB_PASSWORD);
 const DB_NAME = process.env.DB_NAME;
+/**
+ * construction of the path for the connection to the mongodb database
+ */
 
 const MONGO_URI = `mongodb+srv://${USER}:${PASSWORD}@${process.env.DB_HOST}/${DB_NAME}?retryWrites=true&w=majority`;
 let db = null;

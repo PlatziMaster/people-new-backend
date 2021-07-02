@@ -19,6 +19,7 @@
     "google-auth-library": "^7.1.1",
     "graphql": "^15.5.1",
     "graphql-tools": "^7.0.5",
+    "jsdoc": "^3.6.7",
     "jsonwebtoken": "^8.5.1",
     "mongodb": "^3.6.9",
     "mysql": "^2.18.1"
@@ -35,7 +36,8 @@
     "test": " mocha tests/api.test.js  --exit",
     "build": "babel src --out-dir dist",
     "dev": "nodemon src/app.js --exec babel-node",
-    "start": "node dist/app.js"
+    "start": "node dist/app.js",
+    "docs": "jsdoc -c jsdoc.json"
   },
   "repository": {
     "type": "git",

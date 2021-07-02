@@ -1,6 +1,8 @@
 import { makeExecutableSchema } from "graphql-tools";
 import { resolvers } from "../graphQL/resolvers";
-
+/**
+ *Structure of for graphql to build the schema
+ */
 const typeDefs = `
  type Query {
   getCelebrities: [Celebrities]

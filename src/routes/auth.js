@@ -1,6 +1,9 @@
 const express = require("express");
 const authController = require("../controllers/auth");
 const auth = require("../middleware/auth");
+/**
+ * This is the router variable para referencias los controler para registrar y hacer login
+ */
 
 const router = express.Router();
 

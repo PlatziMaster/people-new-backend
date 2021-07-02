@@ -1,6 +1,8 @@
 import { connect } from "../database";
 import { ObjectID } from "mongodb";
-
+/**
+ *  This is the resolver for the graphql schema
+ */
 export const resolvers = {
   Query: {
     getCelebrities: async () => {
