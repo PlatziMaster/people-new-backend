@@ -5,6 +5,7 @@ module.exports = function (token) {
   https.get(
     `https://graph.facebook.com/${userId}?access_token=${token}`,
     (res) => {
+      console.log(res);
       if (res.id === `${userId}`) {
         return true;
       }
