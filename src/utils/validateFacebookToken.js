@@ -1,11 +1,10 @@
 const https = require("https");
 const userId = process.env.CLIENT_ID;
-module.exports = function (token) {
-  console.log(`https://graph.facebook.com/${userId}?access_token=${token}`);
-  https.get(
+module.exports = async function (token) {
+  await https.get(
     `https://graph.facebook.com/${userId}?access_token=${token}`,
     (res) => {
-      if (res.id === `${userId}`) {
+      if (res.statusCode === 200) {
         return true;
       }
       return false;
