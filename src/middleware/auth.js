@@ -32,7 +32,11 @@ async function middleware(req, res, next) {
       return next();
     }
   } catch (error) {}
-
+  /** verify if is facebook oauth token*/
+  const isFacebookToken = validateFacebookToken(token);
+  if (isFacebookToken) {
+    return next();
+  }
   /**
    *  verify if is google oauth token
    */
@@ -41,11 +45,6 @@ async function middleware(req, res, next) {
     return next();
   }
 
-  /** verify if is facebook oauth token*/
-  const isFacebookToken = validateFacebookToken(token);
-  if (isFacebookToken) {
-    return next();
-  }
   /** is not valid*/
   res.json({
     error: {
