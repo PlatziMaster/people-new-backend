@@ -2,6 +2,7 @@ const mysql = require("mysql");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 
+// CR: Multiples connections across the app
 const db = mysql.createPool({
   host: process.env.DATABASE_HOST,
   user: process.env.DATABASE_USER,
@@ -25,6 +26,7 @@ exports.login = async (req, res) => {
       "SELECT * FROM users WHERE email = ?",
       [email],
       async (error, results) => {
+        // CR: The prod env must be without console.logs
         console.log(results);
         if (
           results.length === 0 ||
@@ -40,7 +42,7 @@ exports.login = async (req, res) => {
           const token = jwt.sign({ id }, process.env.JWT_SECRET, {
             expiresIn: process.env.JWT_EXPIRES_IN,
           });
-
+          // CR: The prod env must be without console.logs
           console.log("The token is: " + token);
 
           const cookieOptions = {
@@ -50,10 +52,12 @@ exports.login = async (req, res) => {
             httpOnly: true,
           };
           const dateUpdate = new Date();
+          // CR: Which is the reason to update the user? For save the last login?
           db.query(
             `UPDATE users SET updatedAt = ?  WHERE  email = "${email}"`,
             [dateUpdate],
             (error, results) => {
+              // CR: The prod env must be without console.logs
               if (error) {
                 console.log(error);
               } else {
@@ -72,6 +76,7 @@ exports.login = async (req, res) => {
       }
     );
   } catch (error) {
+    // CR: The prod env must be without console.logs
     console.log(error);
   }
 };
@@ -83,6 +88,7 @@ exports.register = (req, res) => {
     "SELECT email FROM users WHERE email = ?",
     [email],
     async (error, results) => {
+      // CR: The prod env must be without console.logs
       if (error) {
         console.log(error);
       }
@@ -110,6 +116,7 @@ exports.register = (req, res) => {
           createdAt: dateUpdate,
         },
         (error, results) => {
+          // CR: The prod env must be without console.logs
           if (error) {
             console.log(error);
           } else {

@@ -185,6 +185,8 @@ def etl():
     # Dropping collection before inserting
     collection.drop()
 
+    # CR: Here all process with artist to do manually, my recommendation is creating a person model in your DB and iterate
+
     muse_albums = get_artist_albums_ids('12Chz98pHFMPJEknJQMWvI')
     coldplay_albums = get_artist_albums_ids('4gzpq5DPGxSnKTe4SA8HAU')
     madona_albums = get_artist_albums_ids('6tbjWDEIzxoDsBA1FuhfPW')
